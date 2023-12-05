@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         cardViewFavorites = findViewById(R.id.cardViewFavorites)
 
         cardViewLaunches.setOnClickListener {
-            Log.i("Main", "clicked launches")
+//            Log.i("Main", "clicked launches")
         }
 
         cardViewAstronauts.setOnClickListener {
