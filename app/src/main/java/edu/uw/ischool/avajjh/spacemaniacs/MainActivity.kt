@@ -22,6 +22,8 @@ class MainActivity : AppCompatActivity() {
         cardViewFavorites = findViewById(R.id.cardViewFavorites)
 
         cardViewLaunches.setOnClickListener {
+            val intent = Intent(this, LaunchesPage::class.java)
+            startActivity(intent)
             Log.i("Main", "clicked launches")
         }
 
