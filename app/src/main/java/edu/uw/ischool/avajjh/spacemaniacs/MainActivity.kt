@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         cardViewAstronauts.setOnClickListener {
+            val intent = Intent(this, RandomAstronautGenerator::class.java)
             Log.i("Main", "clicked astronauts")
         }
 
