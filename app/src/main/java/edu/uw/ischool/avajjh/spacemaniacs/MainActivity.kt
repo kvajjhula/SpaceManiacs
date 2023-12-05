@@ -1,5 +1,6 @@
 package edu.uw.ischool.avajjh.spacemaniacs
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -29,8 +30,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         cardViewEvents.setOnClickListener {
+            val intent = Intent(this, EventsLandingPage::class.java)
+            startActivity(intent)
             Log.i("Main", "clicked events")
-
         }
 
         cardViewFavorites.setOnClickListener {
