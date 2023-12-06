@@ -22,11 +22,12 @@ class MainActivity : AppCompatActivity() {
         cardViewFavorites = findViewById(R.id.cardViewFavorites)
 
         cardViewLaunches.setOnClickListener {
-//            Log.i("Main", "clicked launches")
+            Log.i("Main", "clicked launches")
         }
 
         cardViewAstronauts.setOnClickListener {
             val intent = Intent(this, RandomAstronautGenerator::class.java)
+            startActivity(intent)
             Log.i("Main", "clicked astronauts")
         }
 
