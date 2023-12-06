@@ -19,6 +19,9 @@
             android:name=".RandomAstronautGenerator"
             android:exported="false" />
         <activity
+            android:name=".LaunchesPage"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
