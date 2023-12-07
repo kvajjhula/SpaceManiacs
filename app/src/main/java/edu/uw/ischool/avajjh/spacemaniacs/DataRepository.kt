@@ -1,4 +1,7 @@
 package edu.uw.ischool.avajjh.spacemaniacs
 
-class DataRepository {
+interface dataRepoInterface {
+}
+class DataRepository () : dataRepoInterface {
+
 }

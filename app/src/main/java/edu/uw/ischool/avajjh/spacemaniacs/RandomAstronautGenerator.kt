@@ -12,7 +12,18 @@ class RandomAstronautGenerator : AppCompatActivity() {
         setContentView(R.layout.activity_random_astronaut_generator)
         val randomizeButton = findViewById<Button>(R.id.randomizeButton);
         randomizeButton.setOnClickListener() {
-            val serviceIntent = Intent(this, FetchWrite::class.java)
+            val serviceIntent = Intent(this, FetchWrite::class.java).apply {
+                putExtra("params", "launch/upcoming/")
+                putExtra("fileName", "launches")
+
+//                putExtra("params", "event/upcoming/")
+//                putExtra("fileName", "events")
+
+//                putExtra("params", "astronaut")
+//                putExtra("fileName", "astronaut")
+
+
+            }
             this?.startService(serviceIntent)
         }
     }
