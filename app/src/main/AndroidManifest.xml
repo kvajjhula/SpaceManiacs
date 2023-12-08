@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/astronaut_icon"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SpaceManiacs"
+        android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
         tools:targetApi="31">
         <activity
             android:name=".RandomAstronautGenerator"

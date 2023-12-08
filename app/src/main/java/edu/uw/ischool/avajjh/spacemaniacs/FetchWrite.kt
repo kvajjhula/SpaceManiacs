@@ -19,7 +19,9 @@ class FetchWrite : IntentService("FetchWrite") {
         Log.i("Download", "Before executor is running")
 
         executor.execute {
-            val url = URL("http", "tednewardsandbox.site44.com", 80, "/questions.json")
+            val endpoint = "https://lldev.thespacedevs.com/2.2.0/" + intent?.getStringExtra("params")
+            Log.i("Download", endpoint)
+            val url = URL(endpoint)
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
 
@@ -28,7 +30,7 @@ class FetchWrite : IntentService("FetchWrite") {
             if (connection.responseCode == HttpURLConnection.HTTP_OK) {
                 val inputStream = connection.getInputStream()
                 val reader = InputStreamReader(inputStream)
-                val fileName = "Questions.json"
+                val fileName = intent?.getStringExtra("fileName") + ".json"
 
                 Log.i("Download", "Downloading and writing JSON")
                 val folder = getExternalFilesDir("SpaceManiacs")
