@@ -6,15 +6,15 @@ import kotlinx.coroutines.runBlocking
 import java.io.FileReader
 
 class RepositoryApplication : Application() {
-    lateinit var repository: DataRepository
+//    lateinit var repository: DataRepository
 
     override fun onCreate() {
         super.onCreate()
-
+        Log.i("RepositoryApplication", "Created!")
     }
 
     fun update(fileName: String) {
-        val dir = getExternalFilesDir("QuizDroidRepo").toString() + fileName + ".json"
+        val dir = getExternalFilesDir("SpaceManiacs").toString() + "/" + fileName + ".json"
         Log.i("FileReader", "attempting to read")
         try {
             val reader = FileReader(dir)

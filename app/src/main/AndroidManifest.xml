@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
+        android:name=".RepositoryApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:usesCleartextTraffic="true"
@@ -33,5 +34,7 @@
         <activity android:name=".EventsLandingPage" />
         <service android:name=".FetchWrite"/>
     </application>
+
+
 
 </manifest>

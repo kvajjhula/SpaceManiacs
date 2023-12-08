@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 
+
 class EventsLandingPage : AppCompatActivity() {
     lateinit var dropDownSpaceAgency: Spinner
     lateinit var dropDownYear: Spinner
