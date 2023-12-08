@@ -23,11 +23,11 @@ class EventsLandingPage : AppCompatActivity() {
         buttonSearch = findViewById(R.id.buttonSearch)
 
         buttonSearch.setOnClickListener {
-//            val fetchIntent = Intent(this, FetchWrite::class.java).apply {
-//                putExtra("params", "launch/upcoming/")
-//                putExtra("fileName", "launches")
-//            }
-//            this?.startService(fetchIntent)
+            val fetchIntent = Intent(this, FetchWrite::class.java).apply {
+                putExtra("params", "launch/upcoming/")
+                putExtra("fileName", "launches")
+            }
+            this?.startService(fetchIntent)
             Log.i("button", "clicked on search")
             (application as RepositoryApplication).update("launches")
         }
