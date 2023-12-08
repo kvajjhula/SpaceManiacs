@@ -13,14 +13,14 @@ class RandomAstronautGenerator : AppCompatActivity() {
         val randomizeButton = findViewById<Button>(R.id.randomizeButton);
         randomizeButton.setOnClickListener() {
             val serviceIntent = Intent(this, FetchWrite::class.java).apply {
-                putExtra("params", "launch/upcoming/")
-                putExtra("fileName", "launches")
+//                putExtra("params", "launch/upcoming/")
+//                putExtra("fileName", "launches")
 
 //                putExtra("params", "event/upcoming/")
 //                putExtra("fileName", "events")
 
-//                putExtra("params", "astronaut")
-//                putExtra("fileName", "astronaut")
+                putExtra("params", "astronaut")
+                putExtra("fileName", "astronaut")
 
 
             }
