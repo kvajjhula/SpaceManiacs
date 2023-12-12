@@ -17,15 +17,38 @@ class LaunchesPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_launches_page)
 
-        val launchItemList = listOf(
-            LaunchItem("Launch 1", "Description 1"),
-            LaunchItem("Launch 2", "Description 2")
-        )
+//        val launchItemList = listOf(
+//            LaunchItem("Launch 1", "Description 1"),
+//            LaunchItem("Launch 2", "Description 2")
+//        )
 
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        val launchAdapter = SimpleLaunchAdapter(launchItemList)
-        recyclerView.adapter = launchAdapter
+//        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+//        recyclerView.layoutManager = LinearLayoutManager(this)
+//        val launchAdapter = SimpleLaunchAdapter(launchItemList)
+//        recyclerView.adapter = launchAdapter
+
+        val sampleJsonResponse =  """
+        {
+            "count":354,
+            "next":"https://lldev.thespacedevs.com/2.2.0/launch/upcoming/?limit=10&offset=10",
+            "previous":null,
+            "results":[
+                {
+                    "id":"0098c032-73de-4c6f-8d73-5d68b9a12fdf",
+                    "url":"https://lldev.thespacedevs.com/2.2.0/launch/0098c032-73de-4c6f-8d73-5d68b9a12fdf/",
+                    "slug":"falcon-heavy-otv-7-x-37b-ussf-52",
+                    "name":"Falcon Heavy | OTV-7 (X-37B) (USSF-52)",
+                    "window_end": "2023-12-12T01:24:00Z",
+                    "window_start": "2023-12-12T01:14:00Z"
+                }
+            ]
+        }
+    """
+
+
+        // Use the DataRepository
+        val dataRepository = DataRepoInterface.DataRepository()
+        dataRepository.parseJson(sampleJsonResponse)
     }
 }
 

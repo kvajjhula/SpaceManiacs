@@ -6,7 +6,7 @@ import kotlinx.coroutines.runBlocking
 import java.io.FileReader
 
 class RepositoryApplication : Application() {
-    lateinit var repository: DataRepository
+    lateinit var repository: DataRepoInterface.DataRepository
 
     override fun onCreate() {
         super.onCreate()
