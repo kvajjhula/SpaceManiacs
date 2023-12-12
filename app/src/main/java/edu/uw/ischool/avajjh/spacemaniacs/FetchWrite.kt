@@ -43,16 +43,3 @@ class FetchWrite : IntentService("FetchWrite") {
         }
     }
 }
-
-//if (urlConnection.responseCode == HttpURLConnection.HTTP_OK) {
-//    val inputStream = urlConnection.getInputStream()
-//    val reader = InputStreamReader(inputStream)
-//    val fileName = "Questions.json"
-//    Log.i("Download", "Downloading and writing JSON")
-//    val folder = getExternalFilesDir("QuizDroidRepo")
-//    val file = File(folder, fileName)
-//    val outputStream = FileOutputStream(file)
-//    outputStream.write(reader.readText().toByteArray())
-//    reader.close()
-//    outputStream.close()
-//}
