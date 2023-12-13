@@ -32,7 +32,8 @@ class RepositoryApplication : Application() {
             } else if (fileName == "astronauts") {
                 parseAstronauts(responseArray)
             } else if (fileName == "launches") {
-                parseLaunches(responseArray)
+                val resultArray: Array<Launch> = parseLaunches(responseArray)
+                repository.updateLaunches(resultArray)
             } else {
                 Log.e("update", "Invalid Filename")
             }
@@ -70,21 +71,35 @@ class RepositoryApplication : Application() {
         Log.i("parseAstronauts", "parsing")
     }
 
-    fun parseLaunches(responseArray: org.json.JSONArray) {
+    fun parseLaunches(responseArray: org.json.JSONArray) : Array<Launch> {
         Log.i("parsingLaunches", "parsing")
         var resultArray: Array<Launch> = Array(responseArray.length()) {
             val launchObjects = responseArray.getJSONObject(it)
             val missionObject = launchObjects.getJSONObject("mission")
             val name = launchObjects.getString("name")
-            Log.i("index", it.toString())
-            Log.i("name", name)
             val windowStart = launchObjects.getString("window_start")
-            Log.i("window", windowStart)
             val description = missionObject.getString("description")
-            Log.i("descr", description)
             val image = launchObjects.getString("image")
-            Log.i("image", image)
+//            Log.i("index", it.toString())
+//            Log.i("name", name)
+//            Log.i("window", windowStart)
+//            Log.i("descr", description)
+//            Log.i("image", image)
             Launch(name, windowStart, description, image)
         }
+        return resultArray
     }
+
+//    fun parseLaunches(responseArray: org.json.JSONArray): Array<Launch> {
+//        Log.i("parsingLaunches", "parsing")
+//        return Array(responseArray.length()) {
+//            val launchObjects = responseArray.getJSONObject(it)
+//            val missionObject = launchObjects.getJSONObject("mission")
+//            val name = launchObjects.getString("name")
+//            val windowStart = launchObjects.getString("window_start")
+//            val description = missionObject.getString("description")
+//            val image = launchObjects.getString("image")
+//            Launch(name, windowStart, description, image)
+//        }
+//    }
 }
