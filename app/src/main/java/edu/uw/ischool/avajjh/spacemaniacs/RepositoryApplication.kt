@@ -30,7 +30,7 @@ class RepositoryApplication : Application() {
             if (fileName == "events") {
                 val resultArray: Array<Event> = parseEvents(responseArray)
                 repository.updateEvents(resultArray)
-            } else if (fileName == "astronauts") {
+            } else if (fileName == "astronaut") {
                 val resultArray: Array<Astronaut> = parseAstronauts(responseArray)
                 repository.updateAstronauts(resultArray)
             } else if (fileName == "launches") {
