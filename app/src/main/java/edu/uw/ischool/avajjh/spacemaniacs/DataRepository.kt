@@ -21,7 +21,7 @@ class DataRepository() : dataRepoInterface {
     }
 
     override fun updateAstronauts(array: Array<Astronaut>) {
-        TODO("Not yet implemented")
+        astronautArray = array
     }
 
     override fun getEvents(): Array<Event> {
@@ -33,7 +33,7 @@ class DataRepository() : dataRepoInterface {
     }
 
     override fun getAstronauts(): Array<Astronaut> {
-        TODO("Not yet implemented")
+        return astronautArray
     }
 
 }

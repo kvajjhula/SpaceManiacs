@@ -2,6 +2,7 @@ package edu.uw.ischool.avajjh.spacemaniacs
 
 import android.app.Application
 import android.util.Log
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.FileReader
 
@@ -30,14 +31,13 @@ class RepositoryApplication : Application() {
                 val resultArray: Array<Event> = parseEvents(responseArray)
                 repository.updateEvents(resultArray)
             } else if (fileName == "astronauts") {
-                parseAstronauts(responseArray)
+                val resultArray: Array<Astronaut> = parseAstronauts(responseArray)
+                repository.updateAstronauts(resultArray)
             } else if (fileName == "launches") {
                 parseLaunches(responseArray)
             } else {
                 Log.e("update", "Invalid Filename")
             }
-                Log.i("FileReader", responseArray.getJSONObject(0).getString("name"))
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -65,9 +65,19 @@ class RepositoryApplication : Application() {
         }
         return resultArray
     }
-
-    fun parseAstronauts(resultArray: org.json.JSONArray) {
+    fun parseAstronauts(responseArray: org.json.JSONArray): Array<Astronaut> {
         Log.i("parseAstronauts", "parsing")
+        var resultArray: Array<Astronaut> = Array(responseArray.length()) {
+            val astronautsObject = responseArray.getJSONObject(it)
+            val name = astronautsObject.getString("name")
+            val age = astronautsObject.getString("age")
+            val nationality = astronautsObject.getString("nationality")
+            val bio = astronautsObject.getString("bio")
+            val profileImage = astronautsObject.getString("profile_image")
+            val flightCount = astronautsObject.getString("flights_count")
+            Astronaut(name, age, nationality, bio, profileImage, flightCount)
+        }
+        return resultArray
     }
     fun parseLaunches(resultArray: org.json.JSONArray) {
         Log.i("parsingLaunches", "parsing")
