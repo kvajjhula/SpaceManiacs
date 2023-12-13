@@ -10,8 +10,9 @@ interface dataRepoInterface {
 }
 class DataRepository() : dataRepoInterface {
     lateinit var eventArray: Array<Event>
+    var astronautArray: Array<Astronaut> = emptyArray()
     var launchArray: Array<Launch> = emptyArray()
-    lateinit var astronautArray: Array<Astronaut>
+    
     override fun updateEvents(array: Array<Event>) {
         eventArray = array
     }
@@ -21,7 +22,7 @@ class DataRepository() : dataRepoInterface {
     }
 
     override fun updateAstronauts(array: Array<Astronaut>) {
-        TODO("Not yet implemented")
+        astronautArray = array
     }
 
     override fun getEvents(): Array<Event> {
@@ -33,7 +34,7 @@ class DataRepository() : dataRepoInterface {
     }
 
     override fun getAstronauts(): Array<Astronaut> {
-        TODO("Not yet implemented")
+        return astronautArray
     }
 
 }
