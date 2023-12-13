@@ -17,7 +17,7 @@ class DataRepository() : dataRepoInterface {
     }
 
     override fun updateLaunches(array: Array<Launch>) {
-        TODO("Not yet implemented")
+        launchArray = array
     }
 
     override fun updateAstronauts(array: Array<Astronaut>) {
@@ -29,7 +29,7 @@ class DataRepository() : dataRepoInterface {
     }
 
     override fun getLaunches(): Array<Launch> {
-        TODO("Not yet implemented")
+        return launchArray
     }
 
     override fun getAstronauts(): Array<Astronaut> {
