@@ -27,7 +27,7 @@ class RandomAstronautGenerator : AppCompatActivity() {
         }
     }
 
-    fun fetchAndProcessData() {
+    suspend fun fetchAndProcessData() {
         val fetchIntent = Intent(this, FetchWrite::class.java).apply {
             putExtra("params", "astronaut")
             putExtra("fileName", "astronaut")
