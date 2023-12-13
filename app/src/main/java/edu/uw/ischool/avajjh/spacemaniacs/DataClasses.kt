@@ -1,7 +1,5 @@
 package edu.uw.ischool.avajjh.spacemaniacs
 
-import java.util.Date
-
 data class Event(
     val name: String,
     val description: String,
@@ -10,4 +8,20 @@ data class Event(
     val date: String,
     val type: String
 
+)
+
+data class Astronaut(
+    val name: String,
+    val age: String,
+    val nationality: String,
+    val bio: String,
+    val profileImage: String,
+    val flightCount: String
+)
+
+data class Launch(
+    val name: String,
+    val windowStart: String,
+    val description: String,
+    val image: String
 )

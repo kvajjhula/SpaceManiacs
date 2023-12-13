@@ -6,10 +6,11 @@ import org.json.JSONObject
 import java.io.FileReader
 
 class RepositoryApplication : Application() {
-//    lateinit var repository: DataRepository
+    lateinit var repository: DataRepository
 
     override fun onCreate() {
         super.onCreate()
+        repository = DataRepository()
         Log.i("RepositoryApplication", "Created!")
     }
 
@@ -23,7 +24,8 @@ class RepositoryApplication : Application() {
             val responseArray = responseObject.getJSONArray("results")
             Log.i("length", responseArray.length().toString())
             if (fileName == "events") {
-                parseEvents(responseArray)
+                val resultArray: Array<Event> = parseEvents(responseArray)
+                repository.updateEvents(resultArray)
             } else if (fileName == "astronauts") {
                 parseAstronauts(responseArray)
             } else if (fileName == "launches") {
@@ -31,7 +33,6 @@ class RepositoryApplication : Application() {
             } else {
                 Log.e("update", "Invalid Filename")
             }
-
                 Log.i("FileReader", responseArray.getJSONObject(0).getString("name"))
 
         } catch (e: Exception) {
@@ -39,7 +40,7 @@ class RepositoryApplication : Application() {
         }
     }
 
-    fun parseEvents(responseArray: org.json.JSONArray) {
+    fun parseEvents(responseArray: org.json.JSONArray): Array<Event> {
         Log.i("parseEvents", "parsing")
         var resultArray: Array<Event> = Array(responseArray.length()) {
             val eventsObject = responseArray.getJSONObject(it)
@@ -50,15 +51,16 @@ class RepositoryApplication : Application() {
             val featureImage =eventsObject.getString("feature_image")
             val date = eventsObject.getString("date")
             val type = typeObject.getString("name")
-            Log.i("index", it.toString())
-            Log.i("name", eventsObject.getString("name"))
-            Log.i("description", eventsObject.getString("description"))
-            Log.i("location", eventsObject.getString("location"))
-            Log.i("feature_image", eventsObject.getString("feature_image"))
-            Log.i("date", eventsObject.getString("date")::class.java.typeName)
-            Log.i("type", type)
+//            Log.i("index", it.toString())
+//            Log.i("name", eventsObject.getString("name"))
+//            Log.i("description", eventsObject.getString("description"))
+//            Log.i("location", eventsObject.getString("location"))
+//            Log.i("feature_image", eventsObject.getString("feature_image"))
+//            Log.i("date", eventsObject.getString("date")::class.java.typeName)
+//            Log.i("type", type)
             Event(name, description, location, featureImage, date, type)
         }
+        return resultArray
     }
 
     fun parseAstronauts(resultArray: org.json.JSONArray) {

@@ -30,6 +30,11 @@ class EventsLandingPage : AppCompatActivity() {
             this?.startService(fetchIntent)
             Log.i("button", "clicked on search")
             (application as RepositoryApplication).update("events")
+            val eventArray: Array<Event> = (application as RepositoryApplication).repository.getEvents()
+            Log.i("Data", eventArray[0].name)
+            Log.i("Data", eventArray[1].name)
+            Log.i("Data", eventArray[2].name)
+            Log.i("Data", eventArray[1].date)
         }
     }
 }
