@@ -22,6 +22,7 @@ data class Astronaut(
 data class Launch(
     val name: String,
     val windowStart: String,
+    val windowEnd: String,
     val description: String,
     val image: String
 )

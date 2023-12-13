@@ -1,9 +1,12 @@
 package edu.uw.ischool.avajjh.spacemaniacs
 
 import android.content.Intent
+import android.icu.text.SimpleDateFormat
+import android.icu.util.TimeZone
 import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +16,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class LaunchesPage : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -51,9 +56,6 @@ class LaunchesPage : AppCompatActivity() {
                 (application as RepositoryApplication).update("launches")
                 val launchArray: Array<Launch> = (application as RepositoryApplication).repository.getLaunches()
                 launchAdapter.updateData(launchArray.toList())
-//                Log.i("DataLaunch", launchArray[0].name)
-//                Log.i("DataLaunch", launchArray[1].name)
-//                Log.i("DataLaunch", launchArray[1].windowStart)
             }
         }
     }
@@ -114,6 +116,8 @@ class SimpleLaunchAdapter(private var launchList: List<Launch>) :
             upcomingLaunch?.let {
                 holder.headerTitleTextView.text = it.name
                 holder.headerWindowStartTextView.text = it.windowStart
+                holder.bindImage(it.image)
+                holder.bindCountdown(it.windowStart, it.windowEnd)
             }
         }
     }
@@ -130,9 +134,70 @@ class SimpleLaunchAdapter(private var launchList: List<Launch>) :
 
     class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val headerTitleTextView: TextView = itemView.findViewById(R.id.upcomingLaunchName)
-        val headerWindowStartTextView: TextView = itemView.findViewById(R.id.upcomingLaunchWindowStart)
+        val headerWindowStartTextView: TextView = itemView.findViewById(R.id.upcomingLaunchCountdown)
         val upcomingImage: ImageView = itemView.findViewById(R.id.upcomingLaunchImage)
         val notifyButton: Button = itemView.findViewById(R.id.notifyButton)
+        private var countDownTimer: CountDownTimer? = null
+
+
+        fun bindImage(url: String) {
+            Picasso.get().load(url).into(upcomingImage)
+        }
+
+        fun bindCountdown(windowStart: String, windowEnd: String) {
+            val timeDifference = calculateTimeDifference(windowStart, windowEnd)
+
+            val countdownTextView: TextView = itemView.findViewById(R.id.upcomingLaunchCountdown)
+            val countdownLabel: TextView = itemView.findViewById(R.id.upcomingLaunchCountdownLabel)
+
+            countdownLabel.text = "Countdown to Launch:"
+
+            object : CountDownTimer(timeDifference, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val hours = millisUntilFinished / (1000 * 60 * 60)
+                    val minutes = (millisUntilFinished % (1000 * 60 * 60)) / (1000 * 60)
+                    val seconds = (millisUntilFinished % (1000 * 60)) / 1000
+
+                    val countdownText = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+                    countdownTextView.text = countdownText
+                }
+
+                override fun onFinish() {
+                    Log.d("Countdown", "Countdown finished!")
+                }
+            }.start()
+        }
+
+
+        fun calculateTimeDifference(windowStart: String, windowEnd: String): Long {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+            dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+            try {
+                val startDate = dateFormat.parse(windowStart)
+                val endDate = dateFormat.parse(windowEnd)
+
+                if (startDate != null && endDate != null) {
+                    return endDate.time - startDate.time
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            return 0
+        }
+
+        private fun formatMillisToTime(millis: Long): String {
+            val hours = millis / (1000 * 60 * 60)
+            val minutes = (millis % (1000 * 60 * 60)) / (1000 * 60)
+            val seconds = (millis % (1000 * 60)) / 1000
+            return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        }
+
+        // Add a method to cancel the countdown when needed
+        fun cancelCountdown() {
+            countDownTimer?.cancel()
+        }
     }
 }
 
