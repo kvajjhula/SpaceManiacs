@@ -11,6 +11,9 @@ class RepositoryApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         repository = DataRepository()
+        update("events")
+        update("astronaut")
+        update("launches")
         Log.i("RepositoryApplication", "Created!")
     }
 
