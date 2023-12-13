@@ -32,11 +32,12 @@ class RepositoryApplication : Application() {
             } else if (fileName == "astronauts") {
                 parseAstronauts(responseArray)
             } else if (fileName == "launches") {
-                parseLaunches(responseArray)
+                val resultArray: Array<Launch> = parseLaunches(responseArray)
+                repository.updateLaunches(resultArray)
             } else {
                 Log.e("update", "Invalid Filename")
             }
-                Log.i("FileReader", responseArray.getJSONObject(0).getString("name"))
+            Log.i("FileReader", responseArray.getJSONObject(0).getString("name"))
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -69,7 +70,36 @@ class RepositoryApplication : Application() {
     fun parseAstronauts(resultArray: org.json.JSONArray) {
         Log.i("parseAstronauts", "parsing")
     }
-    fun parseLaunches(resultArray: org.json.JSONArray) {
+
+    fun parseLaunches(responseArray: org.json.JSONArray) : Array<Launch> {
         Log.i("parsingLaunches", "parsing")
+        var resultArray: Array<Launch> = Array(responseArray.length()) {
+            val launchObjects = responseArray.getJSONObject(it)
+            val missionObject = launchObjects.getJSONObject("mission")
+            val name = launchObjects.getString("name")
+            val windowStart = launchObjects.getString("window_start")
+            val description = missionObject.getString("description")
+            val image = launchObjects.getString("image")
+//            Log.i("index", it.toString())
+//            Log.i("name", name)
+//            Log.i("window", windowStart)
+//            Log.i("descr", description)
+//            Log.i("image", image)
+            Launch(name, windowStart, description, image)
+        }
+        return resultArray
     }
+
+//    fun parseLaunches(responseArray: org.json.JSONArray): Array<Launch> {
+//        Log.i("parsingLaunches", "parsing")
+//        return Array(responseArray.length()) {
+//            val launchObjects = responseArray.getJSONObject(it)
+//            val missionObject = launchObjects.getJSONObject("mission")
+//            val name = launchObjects.getString("name")
+//            val windowStart = launchObjects.getString("window_start")
+//            val description = missionObject.getString("description")
+//            val image = launchObjects.getString("image")
+//            Launch(name, windowStart, description, image)
+//        }
+//    }
 }
