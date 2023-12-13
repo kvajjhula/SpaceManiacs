@@ -21,6 +21,9 @@ class RandomAstronautGenerator : AppCompatActivity() {
 
                 putExtra("params", "astronaut")
                 putExtra("fileName", "astronaut")
+//                (application as RepositoryApplication).update("astronaut")
+                (application as RepositoryApplication).update("launches")
+
 
 
             }
