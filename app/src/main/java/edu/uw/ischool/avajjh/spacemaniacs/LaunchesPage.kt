@@ -1,9 +1,15 @@
 package edu.uw.ischool.avajjh.spacemaniacs
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone
 import android.media.Image
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -14,6 +20,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -76,6 +83,8 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
     companion object {
         private const val TYPE_HEADER = 0
         private const val TYPE_ITEM = 1
+        private const val CHANNEL_ID = "UpcomingLaunchChannel"
+        private const val NOTIFICATION_ID = 1
     }
 
     fun updateData(newLaunchList: List<Launch>) {
@@ -150,7 +159,47 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
 
         init {
             notifyButton.setOnClickListener {
-                notifyUser()
+                notifyUser(itemView.context)
+            }
+        }
+
+        private fun notifyUser(context: Context) {
+            // Create a notification channel (required for API 26 and above)
+            createNotificationChannel(context)
+
+            // Create an explicit intent for the notification
+            val intent = Intent(context, LaunchesPage::class.java)
+            val pendingIntent = PendingIntent.getActivity(context, 0, intent,
+                PendingIntent.FLAG_IMMUTABLE)
+
+            // Build the notification
+            val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
+                .setContentTitle("Upcoming Launch")
+                .setContentText("The launch is about to happen!")
+                .setSmallIcon(R.drawable.notification_icon)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+
+            // Show the notification
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+        }
+
+        // Create a notification channel (required for API 26 and above)
+        private fun createNotificationChannel(context: Context) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val name = "Upcoming Launch Channel"
+                val descriptionText = "Channel for upcoming launch notifications"
+                val importance = NotificationManager.IMPORTANCE_DEFAULT
+                val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                    description = descriptionText
+                }
+
+                // Register the channel with the system
+                val notificationManager =
+                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.createNotificationChannel(channel)
             }
         }
 
@@ -189,16 +238,6 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
             countDownTimer?.start()
         }
 
-        private fun notifyUser() {
-            // Implement the logic to notify the user (e.g., show a notification)
-            // You can use NotificationManager or any other method to notify the user.
-            // For simplicity, I'll print a log message.
-            notifyButton.setOnClickListener() {
-                Log.i("Notification", "Notify user about the upcoming launch!")
-            }
-
-        }
-
         fun calculateTimeDifference(windowStart: String, windowEnd: String): Long {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
             dateFormat.timeZone = TimeZone.getTimeZone("UTC")
@@ -227,6 +266,6 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
         fun cancelCountdown() {
             countDownTimer?.cancel()
         }
-
     }
 }
+
