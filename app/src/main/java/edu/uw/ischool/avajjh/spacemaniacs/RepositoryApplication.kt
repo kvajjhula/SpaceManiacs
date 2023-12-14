@@ -88,6 +88,7 @@ class RepositoryApplication : Application() {
             val missionObject = launchObjects.getJSONObject("mission")
             val name = launchObjects.getString("name")
             val windowStart = launchObjects.getString("window_start")
+            val windowEnd = launchObjects.getString("window_end")
             val description = missionObject.getString("description")
             val image = launchObjects.getString("image")
 //            Log.i("index", it.toString())
@@ -95,7 +96,7 @@ class RepositoryApplication : Application() {
 //            Log.i("window", windowStart)
 //            Log.i("descr", description)
 //            Log.i("image", image)
-            Launch(name, windowStart, description, image)
+            Launch(name, windowStart, windowEnd, description, image)
         }
         return resultArray
     }
