@@ -71,7 +71,6 @@ class LaunchesPage : AppCompatActivity() {
         this?.startService(fetchIntent)
     }
 
-    // Add this function to remove an item from the adapter
     fun removeItem(position: Int) {
         launchAdapter.removeLaunch(position)
     }
@@ -164,15 +163,12 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
         }
 
         private fun notifyUser(context: Context) {
-            // Create a notification channel (required for API 26 and above)
             createNotificationChannel(context)
 
-            // Create an explicit intent for the notification
             val intent = Intent(context, LaunchesPage::class.java)
             val pendingIntent = PendingIntent.getActivity(context, 0, intent,
                 PendingIntent.FLAG_IMMUTABLE)
 
-            // Build the notification
             val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle("Upcoming Launch")
                 .setContentText("The launch is about to happen!")
@@ -180,13 +176,11 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
 
-            // Show the notification
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
         }
 
-        // Create a notification channel (required for API 26 and above)
         private fun createNotificationChannel(context: Context) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val name = "Upcoming Launch Channel"
@@ -196,7 +190,6 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
                     description = descriptionText
                 }
 
-                // Register the channel with the system
                 val notificationManager =
                     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 notificationManager.createNotificationChannel(channel)
@@ -208,7 +201,6 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
         }
 
         fun bindCountdown(windowStart: String, windowEnd: String, adapterPosition: Int) {
-            // Calculate the initial time difference only if it hasn't been calculated before
             if (initialTimeDifference == 0L) {
                 initialTimeDifference = calculateTimeDifference(windowStart, windowEnd)
             }
@@ -230,8 +222,6 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
 
                 override fun onFinish() {
                     Log.d("Countdown", "Countdown finished!")
-
-                    // Remove the item from the dataset and notify the adapter
                     (itemView.context as? LaunchesPage)?.removeItem(adapterPosition)
                 }
             }
