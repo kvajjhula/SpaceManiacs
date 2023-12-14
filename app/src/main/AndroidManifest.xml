@@ -36,6 +36,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".EventsResult" />
         <activity android:name=".EventsLandingPage" />
 
         <service android:name=".FetchWrite" />

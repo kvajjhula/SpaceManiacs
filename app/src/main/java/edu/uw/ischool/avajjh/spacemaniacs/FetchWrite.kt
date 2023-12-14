@@ -12,7 +12,12 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import javax.net.ssl.HttpsURLConnection
 
-class FetchWrite : IntentService("FetchWrite") {
+//interface FetchWriteCallback {
+//    fun onUpdateCompleted()
+//}
+
+class FetchWrite(private val callback: FetchWriteCallback) : IntentService("FetchWrite") {
+
     override fun onHandleIntent(intent: Intent?) {
         val mainActivity = this
         val executor: Executor = Executors.newSingleThreadExecutor()
@@ -40,6 +45,7 @@ class FetchWrite : IntentService("FetchWrite") {
                 reader.close()
                 outputStream.close()
             }
+            callback.onUpdateCompleted()
         }
     }
 }
