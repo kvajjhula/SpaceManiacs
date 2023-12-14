@@ -40,10 +40,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         cardViewFavorites.setOnClickListener {
+            val intent = Intent(this, Favorites::class.java)
+            startActivity(intent)
             Log.i("Main", "clicked favorites")
-
         }
-
 
     }
 }
