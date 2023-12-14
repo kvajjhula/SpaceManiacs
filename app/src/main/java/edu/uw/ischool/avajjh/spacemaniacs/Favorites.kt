@@ -21,10 +21,9 @@ class Favorites : AppCompatActivity() {
 
     private fun setupListView(astronauts: List<Astronaut>) {
         val listView = findViewById<ListView>(R.id.listViewFavs)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, astronauts.map { it.name })
+        val adapter = ArrayAdapter(this, R.layout.list_item_astronaut, R.id.textView, astronauts.map { it.name })
         listView.adapter = adapter
     }
-
     private fun readFavoritesData() : List<Astronaut> {
         val path = getExternalFilesDir("SpaceManiacs").toString() + "/favorites.json"
         val file = File(path)
@@ -47,6 +46,7 @@ class Favorites : AppCompatActivity() {
             )
             astronauts.add(astronaut)
         }
+        Log.i("astro", astronauts.toString())
 
         return astronauts
     }
