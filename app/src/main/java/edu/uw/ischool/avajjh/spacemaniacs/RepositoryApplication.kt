@@ -32,7 +32,7 @@ class RepositoryApplication : Application() {
         Log.i("Download", "Before executor is running")
 
         executor.execute {
-            val endpoint = "https://ll.thespacedevs.com/2.2.0/" + fetchParams
+            val endpoint = "https://lldev.thespacedevs.com/2.2.0/" + fetchParams
             Log.i("Download", endpoint)
             val url = URL(endpoint)
             val connection = url.openConnection() as HttpURLConnection
