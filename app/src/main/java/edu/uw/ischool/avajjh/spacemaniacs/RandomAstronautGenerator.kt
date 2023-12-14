@@ -32,9 +32,9 @@ class RandomAstronautGenerator : AppCompatActivity() {
                 val astronautArrayLength = astronautArray.size - 1 // should be 10?
                 val randomAstronaut = astronautArray[(0..astronautArrayLength).random()]
 
-                astronautName.text = randomAstronaut.name
+                astronautName.text = "Name: ${randomAstronaut.name}"
                 astronautAge.text = "Age:  ${randomAstronaut.age}"
-                astronautNationality.text = randomAstronaut.nationality
+                astronautNationality.text = "Nationality: ${randomAstronaut.nationality}"
                 astronautFlight.text = "Flight Count: ${randomAstronaut.flightCount}"
                 astronautBio.text = "Bio: ${randomAstronaut.bio}"
             }
