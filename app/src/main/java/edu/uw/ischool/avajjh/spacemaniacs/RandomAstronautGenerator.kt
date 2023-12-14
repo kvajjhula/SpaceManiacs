@@ -22,6 +22,7 @@ class RandomAstronautGenerator : AppCompatActivity() {
         val astronautNationality = findViewById<TextView>(R.id.astronautNationality)
         val astronautFlight = findViewById<TextView>(R.id.astronautFlightCount)
         val astronautBio = findViewById<TextView>(R.id.astronautBio)
+        var astronautImageURL = ""
 
         randomizeButton.setOnClickListener() {
             GlobalScope.launch(Dispatchers.Main) {
@@ -37,6 +38,8 @@ class RandomAstronautGenerator : AppCompatActivity() {
                 astronautNationality.text = "Nationality: ${randomAstronaut.nationality}"
                 astronautFlight.text = "Flight Count: ${randomAstronaut.flightCount}"
                 astronautBio.text = "Bio: ${randomAstronaut.bio}"
+                astronautImageURL = randomAstronaut.profileImage
+
             }
         }
     }
