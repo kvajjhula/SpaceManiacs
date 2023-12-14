@@ -1,9 +1,15 @@
 package edu.uw.ischool.avajjh.spacemaniacs
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone
 import android.media.Image
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -14,6 +20,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -64,7 +71,6 @@ class LaunchesPage : AppCompatActivity() {
         this?.startService(fetchIntent)
     }
 
-    // Add this function to remove an item from the adapter
     fun removeItem(position: Int) {
         launchAdapter.removeLaunch(position)
     }
@@ -76,6 +82,8 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
     companion object {
         private const val TYPE_HEADER = 0
         private const val TYPE_ITEM = 1
+        private const val CHANNEL_ID = "UpcomingLaunchChannel"
+        private const val NOTIFICATION_ID = 1
     }
 
     fun updateData(newLaunchList: List<Launch>) {
@@ -150,7 +158,41 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
 
         init {
             notifyButton.setOnClickListener {
-                notifyUser()
+                notifyUser(itemView.context)
+            }
+        }
+
+        private fun notifyUser(context: Context) {
+            createNotificationChannel(context)
+
+            val intent = Intent(context, LaunchesPage::class.java)
+            val pendingIntent = PendingIntent.getActivity(context, 0, intent,
+                PendingIntent.FLAG_IMMUTABLE)
+
+            val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
+                .setContentTitle("Upcoming Launch")
+                .setContentText("The launch is about to happen!")
+                .setSmallIcon(R.drawable.notification_icon)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+        }
+
+        private fun createNotificationChannel(context: Context) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val name = "Upcoming Launch Channel"
+                val descriptionText = "Channel for upcoming launch notifications"
+                val importance = NotificationManager.IMPORTANCE_DEFAULT
+                val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                    description = descriptionText
+                }
+
+                val notificationManager =
+                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.createNotificationChannel(channel)
             }
         }
 
@@ -159,7 +201,6 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
         }
 
         fun bindCountdown(windowStart: String, windowEnd: String, adapterPosition: Int) {
-            // Calculate the initial time difference only if it hasn't been calculated before
             if (initialTimeDifference == 0L) {
                 initialTimeDifference = calculateTimeDifference(windowStart, windowEnd)
             }
@@ -181,22 +222,10 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
 
                 override fun onFinish() {
                     Log.d("Countdown", "Countdown finished!")
-
-                    // Remove the item from the dataset and notify the adapter
                     (itemView.context as? LaunchesPage)?.removeItem(adapterPosition)
                 }
             }
             countDownTimer?.start()
-        }
-
-        private fun notifyUser() {
-            // Implement the logic to notify the user (e.g., show a notification)
-            // You can use NotificationManager or any other method to notify the user.
-            // For simplicity, I'll print a log message.
-            notifyButton.setOnClickListener() {
-                Log.i("Notification", "Notify user about the upcoming launch!")
-            }
-
         }
 
         fun calculateTimeDifference(windowStart: String, windowEnd: String): Long {
@@ -227,6 +256,6 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
         fun cancelCountdown() {
             countDownTimer?.cancel()
         }
-
     }
 }
+
