@@ -46,6 +46,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
+    implementation("androidx.core:core-ktx:1.6.0")
     implementation("com.google.code.gson:gson:2.8.8")
     implementation("com.squareup.picasso:picasso:2.8")
     testImplementation("junit:junit:4.13.2")

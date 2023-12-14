@@ -11,7 +11,7 @@ interface dataRepoInterface {
 class DataRepository() : dataRepoInterface {
     lateinit var eventArray: Array<Event>
     var astronautArray: Array<Astronaut> = emptyArray()
-    var launchArray: Array<Launch> = emptyArray()
+    lateinit var launchArray: Array<Launch>
     
     override fun updateEvents(array: Array<Event>) {
         eventArray = array
