@@ -18,6 +18,11 @@ class RandomAstronautGenerator : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_random_astronaut_generator)
         val randomizeButton = findViewById<Button>(R.id.randomizeButton)
+        val favoritesButton = findViewById<Button>(R.id.favoritesButton)
+
+        favoritesButton.setOnClickListener() {
+            
+        }
 
         randomizeButton.setOnClickListener() {
             Log.i("button", "clicked on randomize")
