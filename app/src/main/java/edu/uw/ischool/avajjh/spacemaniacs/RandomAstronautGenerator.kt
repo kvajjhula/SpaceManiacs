@@ -24,6 +24,11 @@ class RandomAstronautGenerator : AppCompatActivity() {
         val astronautFlight = findViewById<TextView>(R.id.astronautFlightCount)
         val astronautBio = findViewById<TextView>(R.id.astronautBio)
         val astronautImage = findViewById<ImageView>(R.id.astronautImage)
+        val favoritesButton = findViewById<Button>(R.id.favoritesButton)
+
+        favoritesButton.setOnClickListener() {
+            
+        }
 
         randomizeButton.setOnClickListener() {
             GlobalScope.launch(Dispatchers.Main) {
