@@ -1,9 +1,12 @@
 package edu.uw.ischool.avajjh.spacemaniacs
 
 import android.content.Intent
+import android.icu.text.SimpleDateFormat
+import android.icu.util.TimeZone
 import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +16,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class LaunchesPage : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -29,31 +33,25 @@ class LaunchesPage : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-//
+
         refreshButton = findViewById(R.id.refresh)
-//
-        launchAdapter = SimpleLaunchAdapter(emptyList())
+
+        launchAdapter = SimpleLaunchAdapter(mutableListOf())
         recyclerView.adapter = launchAdapter
 
         GlobalScope.launch(Dispatchers.Main) {
             fetchAndProcessData()
-            Log.i("button", "clicked on refresh")
             (application as RepositoryApplication).update("launches")
             val launchArray: Array<Launch> = (application as RepositoryApplication).repository.getLaunches()
             launchAdapter.updateData(launchArray.toList())
         }
 
-
         refreshButton.setOnClickListener {
             GlobalScope.launch(Dispatchers.Main) {
                 fetchAndProcessData()
-                Log.i("button", "clicked on refresh")
                 (application as RepositoryApplication).update("launches")
                 val launchArray: Array<Launch> = (application as RepositoryApplication).repository.getLaunches()
                 launchAdapter.updateData(launchArray.toList())
-//                Log.i("DataLaunch", launchArray[0].name)
-//                Log.i("DataLaunch", launchArray[1].name)
-//                Log.i("DataLaunch", launchArray[1].windowStart)
             }
         }
     }
@@ -65,9 +63,14 @@ class LaunchesPage : AppCompatActivity() {
         }
         this?.startService(fetchIntent)
     }
+
+    // Add this function to remove an item from the adapter
+    fun removeItem(position: Int) {
+        launchAdapter.removeLaunch(position)
+    }
 }
 
-class SimpleLaunchAdapter(private var launchList: List<Launch>) :
+class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -76,8 +79,16 @@ class SimpleLaunchAdapter(private var launchList: List<Launch>) :
     }
 
     fun updateData(newLaunchList: List<Launch>) {
-        launchList = newLaunchList
+        launchList.clear()
+        launchList.addAll(newLaunchList)
         notifyDataSetChanged()
+    }
+
+    fun removeLaunch(position: Int) {
+        if (position in 0 until launchList.size) {
+            launchList.removeAt(position)
+            notifyItemRemoved(position)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -114,10 +125,11 @@ class SimpleLaunchAdapter(private var launchList: List<Launch>) :
             upcomingLaunch?.let {
                 holder.headerTitleTextView.text = it.name
                 holder.headerWindowStartTextView.text = it.windowStart
+                holder.bindImage(it.image)
+                holder.bindCountdown(it.windowStart, it.windowEnd, holder.adapterPosition)
             }
         }
     }
-
 
     override fun getItemCount(): Int {
         return launchList.size
@@ -130,39 +142,91 @@ class SimpleLaunchAdapter(private var launchList: List<Launch>) :
 
     class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val headerTitleTextView: TextView = itemView.findViewById(R.id.upcomingLaunchName)
-        val headerWindowStartTextView: TextView = itemView.findViewById(R.id.upcomingLaunchWindowStart)
+        val headerWindowStartTextView: TextView = itemView.findViewById(R.id.upcomingLaunchCountdown)
         val upcomingImage: ImageView = itemView.findViewById(R.id.upcomingLaunchImage)
         val notifyButton: Button = itemView.findViewById(R.id.notifyButton)
+        private var countDownTimer: CountDownTimer? = null
+        private var initialTimeDifference: Long = 0
+
+        init {
+            notifyButton.setOnClickListener {
+                notifyUser()
+            }
+        }
+
+        fun bindImage(url: String) {
+            Picasso.get().load(url).into(upcomingImage)
+        }
+
+        fun bindCountdown(windowStart: String, windowEnd: String, adapterPosition: Int) {
+            // Calculate the initial time difference only if it hasn't been calculated before
+            if (initialTimeDifference == 0L) {
+                initialTimeDifference = calculateTimeDifference(windowStart, windowEnd)
+            }
+
+            val countdownTextView: TextView = itemView.findViewById(R.id.upcomingLaunchCountdown)
+            val countdownLabel: TextView = itemView.findViewById(R.id.upcomingLaunchCountdownLabel)
+
+            countdownLabel.text = "Countdown to Launch:"
+
+            countDownTimer = object : CountDownTimer(initialTimeDifference, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val hours = millisUntilFinished / (1000 * 60 * 60)
+                    val minutes = (millisUntilFinished % (1000 * 60 * 60)) / (1000 * 60)
+                    val seconds = (millisUntilFinished % (1000 * 60)) / 1000
+
+                    val countdownText = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+                    countdownTextView.text = countdownText
+                }
+
+                override fun onFinish() {
+                    Log.d("Countdown", "Countdown finished!")
+
+                    // Remove the item from the dataset and notify the adapter
+                    (itemView.context as? LaunchesPage)?.removeItem(adapterPosition)
+                }
+            }
+            countDownTimer?.start()
+        }
+
+        private fun notifyUser() {
+            // Implement the logic to notify the user (e.g., show a notification)
+            // You can use NotificationManager or any other method to notify the user.
+            // For simplicity, I'll print a log message.
+            notifyButton.setOnClickListener() {
+                Log.i("Notification", "Notify user about the upcoming launch!")
+            }
+
+        }
+
+        fun calculateTimeDifference(windowStart: String, windowEnd: String): Long {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+            dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+            try {
+                val startDate = dateFormat.parse(windowStart)
+                val endDate = dateFormat.parse(windowEnd)
+
+                if (startDate != null && endDate != null) {
+                    return endDate.time - startDate.time
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            return 0
+        }
+
+        private fun formatMillisToTime(millis: Long): String {
+            val hours = millis / (1000 * 60 * 60)
+            val minutes = (millis % (1000 * 60 * 60)) / (1000 * 60)
+            val seconds = (millis % (1000 * 60)) / 1000
+            return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        }
+
+        fun cancelCountdown() {
+            countDownTimer?.cancel()
+        }
+
     }
 }
-
-
-
-//class SimpleLaunchAdapter(private var launchList: List<Launch>) :
-//    RecyclerView.Adapter<SimpleLaunchAdapter.ViewHolder>() {
-//
-//    fun updateData(newLaunchList: List<Launch>) {
-//        launchList = newLaunchList
-//        notifyDataSetChanged()
-//    }
-//
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-//        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
-//        return ViewHolder(view)
-//    }
-//
-//    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        val launch = launchList[position]
-//        holder.titleTextView.text = launch.name
-//        holder.descriptionTextView.text = launch.description
-//    }
-//
-//    override fun getItemCount(): Int {
-//        return launchList.size
-//    }
-//
-//    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//        val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
-//        val descriptionTextView: TextView = itemView.findViewById(R.id.descriptionTextView)
-//    }
-//}
