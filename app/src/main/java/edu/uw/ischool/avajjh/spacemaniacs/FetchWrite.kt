@@ -25,7 +25,7 @@ class FetchWrite(private val callback: FetchWriteCallback) : IntentService("Fetc
 
         executor.execute {
             val endpoint = "https://lldev.thespacedevs.com/2.2.0/" + intent?.getStringExtra("params")
-            Log.i("Download", endpoint)
+            Log.i("Download", "$endpoint")
             val url = URL(endpoint)
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"

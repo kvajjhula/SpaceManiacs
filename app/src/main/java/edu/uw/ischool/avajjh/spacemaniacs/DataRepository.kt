@@ -1,5 +1,7 @@
 package edu.uw.ischool.avajjh.spacemaniacs
 
+import android.util.Log
+
 interface dataRepoInterface {
     fun updateEvents(array: Array<Event>)
     fun updateLaunches(array: Array<Launch>)
@@ -10,8 +12,8 @@ interface dataRepoInterface {
 }
 class DataRepository() : dataRepoInterface {
     lateinit var eventArray: Array<Event>
-    var astronautArray: Array<Astronaut> = emptyArray()
     lateinit var launchArray: Array<Launch>
+    lateinit var astronautArray: Array<Astronaut>
     
     override fun updateEvents(array: Array<Event>) {
         eventArray = array
