@@ -53,8 +53,8 @@ class EventsLandingPage : AppCompatActivity() {
             Log.i("Data", eventArray[0].type)
             Log.i("Data", eventArray[1].name)
             Log.i("Data", eventArray[1].type)
-//            val intent = Intent(this@EventsLandingPage, EventsResult::class.java)
-//            startActivity(intent)
+            val intent = Intent(this@EventsLandingPage, EventsResult::class.java)
+            startActivity(intent)
         }
     }
 
