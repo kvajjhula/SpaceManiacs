@@ -37,6 +37,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".EventsResult" />
+        <activity android:name="EventDetail" />
         <activity android:name=".EventsLandingPage" />
 
         <service android:name=".FetchWrite" />
