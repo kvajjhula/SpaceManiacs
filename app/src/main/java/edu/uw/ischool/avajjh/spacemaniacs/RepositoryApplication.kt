@@ -100,17 +100,4 @@ class RepositoryApplication : Application() {
         }
         return resultArray
     }
-
-//    fun parseLaunches(responseArray: org.json.JSONArray): Array<Launch> {
-//        Log.i("parsingLaunches", "parsing")
-//        return Array(responseArray.length()) {
-//            val launchObjects = responseArray.getJSONObject(it)
-//            val missionObject = launchObjects.getJSONObject("mission")
-//            val name = launchObjects.getString("name")
-//            val windowStart = launchObjects.getString("window_start")
-//            val description = missionObject.getString("description")
-//            val image = launchObjects.getString("image")
-//            Launch(name, windowStart, description, image)
-//        }
-//    }
 }
