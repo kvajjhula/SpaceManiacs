@@ -13,6 +13,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -43,7 +44,7 @@ class LaunchesPage : AppCompatActivity() {
 
         refreshButton = findViewById(R.id.refresh)
 
-        launchAdapter = SimpleLaunchAdapter(mutableListOf())
+        launchAdapter = SimpleLaunchAdapter(mutableListOf(), recyclerView)
         recyclerView.adapter = launchAdapter
 
         GlobalScope.launch(Dispatchers.Main) {
@@ -76,9 +77,8 @@ class LaunchesPage : AppCompatActivity() {
     }
 }
 
-class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
+class SimpleLaunchAdapter(private var launchList: MutableList<Launch>, private val recyclerView: RecyclerView) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
     companion object {
         private const val TYPE_HEADER = 0
         private const val TYPE_ITEM = 1
@@ -86,18 +86,21 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
         private const val NOTIFICATION_ID = 1
     }
 
+    fun removeLaunch(position: Int) {
+        if (position in 0 until launchList.size) {
+            (recyclerView.findViewHolderForAdapterPosition(position) as? HeaderViewHolder)?.cancelCountdown()
+            launchList.removeAt(position)
+            notifyItemRemoved(position)
+        }
+    }
+
+
     fun updateData(newLaunchList: List<Launch>) {
         launchList.clear()
         launchList.addAll(newLaunchList)
         notifyDataSetChanged()
     }
 
-    fun removeLaunch(position: Int) {
-        if (position in 0 until launchList.size) {
-            launchList.removeAt(position)
-            notifyItemRemoved(position)
-        }
-    }
 
     override fun getItemViewType(position: Int): Int {
         return if (position == 0) TYPE_HEADER else TYPE_ITEM
@@ -222,11 +225,15 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
 
                 override fun onFinish() {
                     Log.d("Countdown", "Countdown finished!")
-                    (itemView.context as? LaunchesPage)?.removeItem(adapterPosition)
+
+                    Handler(itemView.context.mainLooper).post {
+                        (itemView.context as? LaunchesPage)?.removeItem(adapterPosition)
+                    }
                 }
             }
             countDownTimer?.start()
         }
+
 
         fun calculateTimeDifference(windowStart: String, windowEnd: String): Long {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
@@ -258,4 +265,3 @@ class SimpleLaunchAdapter(private var launchList: MutableList<Launch>) :
         }
     }
 }
-
