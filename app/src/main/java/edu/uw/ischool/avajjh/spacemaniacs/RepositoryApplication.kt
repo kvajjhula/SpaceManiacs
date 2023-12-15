@@ -38,11 +38,12 @@ class RepositoryApplication : Application() {
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
             Log.i("Download", "inside executor")
+            Log.i("Download", "Downloading and writing JSON")
+
             Log.i("Download", connection.responseCode.toString())
             if (connection.responseCode == HttpURLConnection.HTTP_OK) {
                 val inputStream = connection.getInputStream()
                 val reader = InputStreamReader(inputStream)
-                Log.i("Download", "Downloading and writing JSON")
                 val folder = getExternalFilesDir("SpaceManiacs")
                 val file = File(folder, fileName)
                 val outputStream = FileOutputStream(file)
@@ -122,26 +123,8 @@ class RepositoryApplication : Application() {
             val windowEnd = launchObjects.getString("window_end")
             val description = missionObject.getString("description")
             val image = launchObjects.getString("image")
-//            Log.i("index", it.toString())
-//            Log.i("name", name)
-//            Log.i("window", windowStart)
-//            Log.i("descr", description)
-//            Log.i("image", image)
             Launch(name, windowStart, windowEnd, description, image)
         }
         return resultArray
     }
-
-//    fun parseLaunches(responseArray: org.json.JSONArray): Array<Launch> {
-//        Log.i("parsingLaunches", "parsing")
-//        return Array(responseArray.length()) {
-//            val launchObjects = responseArray.getJSONObject(it)
-//            val missionObject = launchObjects.getJSONObject("mission")
-//            val name = launchObjects.getString("name")
-//            val windowStart = launchObjects.getString("window_start")
-//            val description = missionObject.getString("description")
-//            val image = launchObjects.getString("image")
-//            Launch(name, windowStart, description, image)
-//        }
-//    }
 }

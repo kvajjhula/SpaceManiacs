@@ -12,10 +12,6 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import javax.net.ssl.HttpsURLConnection
 
-//interface FetchWriteCallback {
-//    fun onUpdateCompleted()
-//}
-
 class FetchWrite(private val callback: FetchWriteCallback) : IntentService("FetchWrite") {
 
     override fun onHandleIntent(intent: Intent?) {
