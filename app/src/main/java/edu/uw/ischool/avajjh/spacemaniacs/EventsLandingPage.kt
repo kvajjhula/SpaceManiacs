@@ -7,15 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
-import android.content.Context
-
+import android.widget.Toast
 
 
 class EventsLandingPage : AppCompatActivity() {
@@ -50,12 +42,18 @@ class EventsLandingPage : AppCompatActivity() {
         override fun onUpdateCompleted() {
             (application as RepositoryApplication).update("events")
             val eventArray: Array<Event> = (application as RepositoryApplication).repository.getEvents()
-            Log.i("Data", eventArray[0].name)
-            Log.i("Data", eventArray[0].type)
-            Log.i("Data", eventArray[1].name)
-            Log.i("Data", eventArray[1].type)
-            val intent = Intent(this@EventsLandingPage, EventsResult::class.java)
-            startActivity(intent)
+            if (eventArray.isEmpty()) {
+                runOnUiThread() {
+                    Toast.makeText(
+                        this@EventsLandingPage,
+                        "Filter returned no results",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } else {
+                val intent = Intent(this@EventsLandingPage, EventsResult::class.java)
+                startActivity(intent)
+            }
         }
     }
 
@@ -138,5 +136,4 @@ class EventsLandingPage : AppCompatActivity() {
         // Constructing the final params string
         return paramsList.joinToString("&")
     }
-
 }
