@@ -42,13 +42,13 @@ class EventsLandingPage : AppCompatActivity() {
             (application as RepositoryApplication).update("events")
             val eventArray: Array<Event> = (application as RepositoryApplication).repository.getEvents()
             if (eventArray.isEmpty()) {
-//                Toast.makeText(
-//                    this@EventsLandingPage,
-//                    "Filter returned no results",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-                Log.i("arrayEmpty", eventArray.isEmpty().toString())
-
+                runOnUiThread() {
+                    Toast.makeText(
+                        this@EventsLandingPage,
+                        "Filter returned no results",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             } else {
                 val intent = Intent(this@EventsLandingPage, EventsResult::class.java)
                 startActivity(intent)
