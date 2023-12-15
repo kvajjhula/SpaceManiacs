@@ -1,5 +1,7 @@
 package edu.uw.ischool.avajjh.spacemaniacs
 
+import android.util.Log
+
 interface dataRepoInterface {
     fun updateEvents(array: Array<Event>)
     fun updateLaunches(array: Array<Launch>)
@@ -12,16 +14,17 @@ class DataRepository() : dataRepoInterface {
     lateinit var eventArray: Array<Event>
     lateinit var launchArray: Array<Launch>
     lateinit var astronautArray: Array<Astronaut>
+    
     override fun updateEvents(array: Array<Event>) {
         eventArray = array
     }
 
     override fun updateLaunches(array: Array<Launch>) {
-        TODO("Not yet implemented")
+        launchArray = array
     }
 
     override fun updateAstronauts(array: Array<Astronaut>) {
-        TODO("Not yet implemented")
+        astronautArray = array
     }
 
     override fun getEvents(): Array<Event> {
@@ -29,11 +32,11 @@ class DataRepository() : dataRepoInterface {
     }
 
     override fun getLaunches(): Array<Launch> {
-        TODO("Not yet implemented")
+        return launchArray
     }
 
     override fun getAstronauts(): Array<Astronaut> {
-        TODO("Not yet implemented")
+        return astronautArray
     }
 
 }

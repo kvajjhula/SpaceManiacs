@@ -1,46 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/space_background">
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Random Astronaut Generator"
-        android:textColor="@color/white"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05"/>
+        android:orientation="vertical"
+        android:background="@drawable/space_background"
+        android:padding="15dp">
 
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="266dp"
-        android:layout_height="369dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.373"
-        app:srcCompat="@drawable/sample_astronaut" />
+        <TextView
+            android:id="@+id/randomAstronautGeneratorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Random Astronaut Generator"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            />
 
-    <Button
-        android:id="@+id/randomizeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Generate Random Astronaut"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+        <ImageView
+            android:id="@+id/astronautImage"
+            android:layout_width="215dp"
+            android:layout_height="262dp"
+            android:layout_marginTop="24dp"
+            android:layout_gravity="center_horizontal"
+            app:srcCompat="@drawable/sample_astronaut" />
 
+        <TextView
+            android:id="@+id/astronautName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_marginTop="16dp"
+            android:paddingLeft="20dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/astronautAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Age"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="20dp"/>
+
+        <TextView
+            android:id="@+id/astronautNationality"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nationality"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="20dp"/>
+
+        <TextView
+            android:id="@+id/astronautFlightCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Flight Count"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="20dp"/>
+
+        <TextView
+            android:id="@+id/astronautBio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bio"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="20dp"/>
+
+        <Button
+            android:id="@+id/randomizeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Generate Random Astronaut"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            />
+        <Button
+            android:id="@+id/favoritesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add to Favorites"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            />
+    </LinearLayout>
+</ScrollView>

@@ -2,6 +2,7 @@ package edu.uw.ischool.avajjh.spacemaniacs
 
 import android.app.Application
 import android.util.Log
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
@@ -66,10 +67,12 @@ class RepositoryApplication : Application() {
             if (fileName == "events") {
                 val resultArray: Array<Event> = parseEvents(responseArray)
                 repository.updateEvents(resultArray)
-            } else if (fileName == "astronauts") {
-                parseAstronauts(responseArray)
+            } else if (fileName == "astronaut") {
+                val resultArray: Array<Astronaut> = parseAstronauts(responseArray)
+                repository.updateAstronauts(resultArray)
             } else if (fileName == "launches") {
-                parseLaunches(responseArray)
+                val resultArray: Array<Launch> = parseLaunches(responseArray)
+                repository.updateLaunches(resultArray)
             } else {
                 Log.e("update", "Invalid Filename")
             }
@@ -94,11 +97,51 @@ class RepositoryApplication : Application() {
         }
         return resultArray
     }
-
-    fun parseAstronauts(resultArray: org.json.JSONArray) {
+    fun parseAstronauts(responseArray: org.json.JSONArray): Array<Astronaut> {
         Log.i("parseAstronauts", "parsing")
+        var resultArray: Array<Astronaut> = Array(responseArray.length()) {
+            val astronautsObject = responseArray.getJSONObject(it)
+            val name = astronautsObject.getString("name")
+            val age = astronautsObject.getString("age")
+            val nationality = astronautsObject.getString("nationality")
+            val bio = astronautsObject.getString("bio")
+            val profileImage = astronautsObject.getString("profile_image")
+            val flightCount = astronautsObject.getString("flights_count")
+            Astronaut(name, age, nationality, bio, profileImage, flightCount)
+        }
+        return resultArray
     }
-    fun parseLaunches(resultArray: org.json.JSONArray) {
+
+    fun parseLaunches(responseArray: org.json.JSONArray) : Array<Launch> {
         Log.i("parsingLaunches", "parsing")
+        var resultArray: Array<Launch> = Array(responseArray.length()) {
+            val launchObjects = responseArray.getJSONObject(it)
+            val missionObject = launchObjects.getJSONObject("mission")
+            val name = launchObjects.getString("name")
+            val windowStart = launchObjects.getString("window_start")
+            val windowEnd = launchObjects.getString("window_end")
+            val description = missionObject.getString("description")
+            val image = launchObjects.getString("image")
+//            Log.i("index", it.toString())
+//            Log.i("name", name)
+//            Log.i("window", windowStart)
+//            Log.i("descr", description)
+//            Log.i("image", image)
+            Launch(name, windowStart, windowEnd, description, image)
+        }
+        return resultArray
     }
+
+//    fun parseLaunches(responseArray: org.json.JSONArray): Array<Launch> {
+//        Log.i("parsingLaunches", "parsing")
+//        return Array(responseArray.length()) {
+//            val launchObjects = responseArray.getJSONObject(it)
+//            val missionObject = launchObjects.getJSONObject("mission")
+//            val name = launchObjects.getString("name")
+//            val windowStart = launchObjects.getString("window_start")
+//            val description = missionObject.getString("description")
+//            val image = launchObjects.getString("image")
+//            Launch(name, windowStart, description, image)
+//        }
+//    }
 }

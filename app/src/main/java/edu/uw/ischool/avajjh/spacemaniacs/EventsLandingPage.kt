@@ -32,6 +32,7 @@ class EventsLandingPage : AppCompatActivity() {
         buttonSearch.setOnClickListener {
             Log.i("button", "clicked on search")
             var paramsString = "event/?" + createParamsString()
+            Log.i("params", paramsString)
             (application as RepositoryApplication).fetchWrite(fetchCallBack, paramsString, "events.json")
         }
     }
@@ -131,7 +132,7 @@ class EventsLandingPage : AppCompatActivity() {
         if (selectedYear.isNotBlank()) {
             paramsList.add("year=$selectedYear")
         }
-
+        Log.i("params", paramsList.joinToString("&"))
         // Constructing the final params string
         return paramsList.joinToString("&")
     }
